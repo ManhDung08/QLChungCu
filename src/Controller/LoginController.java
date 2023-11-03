@@ -15,40 +15,54 @@ import javafx.scene.layout.HBox;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 
 
 public class LoginController {
     @FXML
-    public TextField txtUserName;
+    private TextField txtUserName;
     
     @FXML
-    public PasswordField txtHidePassword;
+    private PasswordField txtHidePassword;
     
     @FXML
-    public TextField txtShowPassword;
+    private TextField txtShowPassword;
     
     @FXML
-    public ImageView Open_Eye_Icon;
+    private ImageView Open_Eye_Icon;
     
     @FXML
-    public ImageView Close_Eye_Icon;
+    private HBox showPassword;
     
     @FXML
-    public HBox showPassword;
+    private HBox hidePassword;
     
     @FXML
-    public HBox hidePassword;
+    private ImageView backGround;
     
     @FXML
-    public ImageView backGround;
+    private Button loginButton; 
     
     String password;
     
-    public void Initialize(){
+    @FXML
+    public void initialize() {
+    Platform.runLater(() -> {
         txtShowPassword.setVisible(true);
         Open_Eye_Icon.setVisible(true);
-    }
+
+        Scene scene = loginButton.getScene();
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                loginButton.fire();
+            }
+        });
+    });
+}
     
     @FXML
     public void LostFocus(MouseEvent event){
@@ -85,7 +99,7 @@ public class LoginController {
     public void CheckLogin(ActionEvent event){
         String userName = txtUserName.getText();
         if(userName.isEmpty() || password.isEmpty()){
-            ShowErrorDialog("Vui lòng nhập tên đăng nhập và mật khẩu!");
+            ShowErrorDialog("Vui lòng nhập đầy đủ thông tin để đăng nhập!");
             return;
         }
         
@@ -104,7 +118,7 @@ public class LoginController {
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.next()) {
-                    //Đổi scene sang HomeView -- làm sau
+                    ControllerUtil.ChangeScene("HomeView.fxml", "Home");
                 } else {
                     ShowErrorDialog("Sai tên đăng nhập hoặc mật khẩu.");
                 }

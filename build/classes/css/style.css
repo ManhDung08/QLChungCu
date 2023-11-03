@@ -13,3 +13,63 @@
     -fx-background-color : #104e8b;
     -fx-background-radius :  30px;
 }
+
+.menuButton
+{
+    -fx-background-color :  transparent;
+}
+.menuButton:hover
+{
+    -fx-background-color : #87ceff;
+    -fx-background-radius : 30px;
+}
+.menuButton:pressed
+{
+    -fx-background-color : #6ca6cd;
+    -fx-background-radius : 30px;
+}
+
+#settingButton
+{
+    -fx-background-color :  transparent;
+}
+#settingButton:hover
+{
+    -fx-background-color : #87ceff;
+}
+#settingButton:showing
+{
+    -fx-background-color : #6ca6cd;
+}
+.settingItem
+{
+    -fx-pref-width: 179px;
+    -fx-pref-height: 40px;
+    -fx-font-size : 13px;
+    -fx-cursor: hand;
+}
+
+
+#sidebarPane
+{
+    -fx-background-color : #222222;
+    -fx-background-radius : 0px 5px 10px 5px;
+}
+
+.dbButton
+{
+    -fx-background-color : transparent;
+    
+}
+.dbButton .arrow 
+{
+    -fx-background-color : #ffffff;
+}
+.dbButton:hover
+{
+    -fx-background-color : #3f3f3f;
+}
+.dbButton:pressed
+{
+    -fx-background-color : #605953;
+}
