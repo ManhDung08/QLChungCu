@@ -4,8 +4,6 @@ package Controller;
 import Model.MysqlConnector;
 import java.sql.Connection;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -51,18 +49,18 @@ public class LoginController {
     
     @FXML
     public void initialize() {
-    Platform.runLater(() -> {
-        txtShowPassword.setVisible(true);
-        Open_Eye_Icon.setVisible(true);
+        Platform.runLater(() -> {
+            txtShowPassword.setVisible(true);
+            Open_Eye_Icon.setVisible(true);
 
-        Scene scene = loginButton.getScene();
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                loginButton.fire();
-            }
+            Scene scene = loginButton.getScene();
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    loginButton.fire();
+                }
+            });
         });
-    });
-}
+    }
     
     @FXML
     public void LostFocus(MouseEvent event){
@@ -99,7 +97,7 @@ public class LoginController {
     public void CheckLogin(ActionEvent event){
         String userName = txtUserName.getText();
         if(userName.isEmpty() || password.isEmpty()){
-            ShowErrorDialog("Vui lòng nhập đầy đủ thông tin để đăng nhập!");
+            ControllerUtil.showErrorMessage("Vui lòng nhập đầy đủ thông tin để đăng nhập!");
             return;
         }
         
@@ -107,10 +105,10 @@ public class LoginController {
         try {
             Connection connection = MysqlConnector.getInstance().getConnection();
             if (connection == null) {
-                ShowErrorDialog("Lỗi kết nối với cơ sở dữ liệu.");
+                ControllerUtil.showErrorMessage("Lỗi kết nối với cơ sở dữ liệu.");
             }
 
-            String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+            String sql = "SELECT * FROM user WHERE UserName = ? AND Password = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, userName);
                 statement.setString(2, password);
@@ -120,20 +118,12 @@ public class LoginController {
                 if (resultSet.next()) {
                     ControllerUtil.ChangeScene("HomeView.fxml", "Home");
                 } else {
-                    ShowErrorDialog("Sai tên đăng nhập hoặc mật khẩu.");
+                    ControllerUtil.showErrorMessage("Sai tên đăng nhập hoặc mật khẩu.");
                 }
             }
         } catch (SQLException e) {
-            ShowErrorDialog("Lỗi kết nối với cơ sở dữ liệu.");
+            ControllerUtil.showErrorMessage("Lỗi kết nối với cơ sở dữ liệu.");
         }
-    }
-    
-    private void ShowErrorDialog(String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Lỗi");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
     
     
