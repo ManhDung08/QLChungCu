@@ -1,0 +1,48 @@
+.background
+{
+    -fx-background-color: #dddddd;
+    -fx-background-radius: 20px;
+}
+
+.table 
+{
+    -fx-background-color: white;
+    -fx-border-color: #000000;
+    -fx-border-width: 0.5px;
+}
+.table .column-header {
+    -fx-background-color: #00ff7f;
+    -fx-text-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0.5px;
+    
+}
+.table .table-cell
+{
+    -fx-border-width: 0.5; 
+    -fx-border-color: #cccccc;
+}
+
+.form
+{
+    -fx-background-color: #8b8682;
+    -fx-background-radius: 5px;
+}
+
+.addBtn
+{
+    -fx-background-color: #8470ff;
+    -fx-background-radius: 5px;
+}
+
+.field {
+    -fx-font-family: "Arial";
+    -fx-font-size: 15;
+}
+
+.comboBox
+{
+    -fx-text-fill: #c0c0c0;
+    -fx-font-family: "Arial";
+    -fx-font-size: 15;
+}

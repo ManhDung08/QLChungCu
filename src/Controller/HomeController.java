@@ -7,13 +7,14 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
@@ -21,15 +22,6 @@ import javafx.util.Duration;
 public class HomeController {
     @FXML
     private BorderPane borderPane;
-
-    @FXML
-    private AnchorPane centerPane;
-
-    @FXML
-    private MenuItem changePwButton;
-
-    @FXML
-    private Button closeMenuButton;
 
     @FXML
     private MenuButton feeButton;
@@ -44,13 +36,7 @@ public class HomeController {
     private MenuItem livingFeeButton;
 
     @FXML
-    private MenuItem logoutButton;
-
-    @FXML
     private MenuItem managementFeeButton;
-
-    @FXML
-    private Button openMenuButton;
 
     @FXML
     private MenuItem parkingFeeButton;
@@ -65,39 +51,14 @@ public class HomeController {
     private MenuItem serviceFeeButton;
 
     @FXML
-    private MenuButton settingButton;
-
-    @FXML
-    private AnchorPane sidebarPane;
-
-    @FXML
     private MenuItem statisticButton;
-
-    @FXML
-    private MenuItem userInfoButton;
 
     @FXML
     private MenuItem voluntaryFeeButton;
     
     
-    private void ChangeViewInCenter(String fxmlFile){
-        Parent root = null;
-        try{
-            root = FXMLLoader.load(HomeController.class.getResource("/View/" + fxmlFile));
-        }
-        catch(IOException ex){
-            ex.printStackTrace();
-        }
-        borderPane.setCenter(root);
-    }
-    
-    
     @FXML
     public void initialize(){
-        closeMenuButton.setVisible(true);
-        openMenuButton.setVisible(false);
-        
-        
         homeOwnerButton.setOnShowing(event -> {
             TranslateTransition slide = new TranslateTransition();
             slide.setDuration(Duration.seconds(0.15));
@@ -129,7 +90,7 @@ public class HomeController {
             }
         });
         
-        
+        //setCenterContent("ThongKeView.fxml");
         
     }
     
@@ -137,88 +98,80 @@ public class HomeController {
     //Logout
     @FXML
     public void LogoutOnAction(ActionEvent event){ 
-        ControllerUtil.ChangeScene("LoginView.fxml", "Login");
+        boolean confirmed = ControllerUtil.showConfirmationDialog("Xác nhận đăng xuất", "Bạn có chắc chắn muốn đăng xuất không ?");
+        if(confirmed){
+            ControllerUtil.ChangeScene("LoginView.fxml", "Login");
+            ControllerUtil.showSuccessAlert("Đăng xuất thành công!");
+        }
     }
     
     
     //Hiển thị thông tin cá nhân của admin
     @FXML
-    public void UserInfoOnAction(ActionEvent event){
-        
+    public void UserInfoOnAction(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(HomeController.class.getResource("/View/UserInfoForm.fxml"));
+        Stage changePwStage = new Stage();
+        changePwStage.setResizable(false);
+        changePwStage.initModality(Modality.APPLICATION_MODAL); // Đảm bảo chỉ có thể tương tác với cửa sổ này
+        changePwStage.setTitle("Thông tin cá nhân người dùng");
+        changePwStage.setScene(new Scene(root));
+        changePwStage.showAndWait();
     }
     
     
     //Hiển thị màn hình thay đổi mật khẩu
     @FXML
-    public void ChangePwOnAction(ActionEvent event){
-        
+    public void ChangePwOnAction(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(HomeController.class.getResource("/View/ChangePwForm.fxml"));
+        Stage changePwStage = new Stage();
+        changePwStage.setResizable(false);
+        changePwStage.initModality(Modality.APPLICATION_MODAL); // Đảm bảo chỉ có thể tương tác với cửa sổ này
+        changePwStage.setTitle("Form thay đổi mật khẩu");
+        changePwStage.setScene(new Scene(root));
+        changePwStage.showAndWait();
     }
     
     
     @FXML
     public void HandleClick(ActionEvent event){
         if(event.getSource() == residentButton){  //Hiển thị bảng nhân khẩu
-            
+            setCenterContent("NhanKhauView.fxml");
         }
         else if(event.getSource() == householdButton){   //Hiển thị bảng hộ khẩu
-            
+            setCenterContent("HoKhauView.fxml");
         }
         else if(event.getSource() == serviceFeeButton){  //Hiển thị bảng phí dịch vụ
-            
+            setCenterContent("PhiDichVuView.fxml");
         }
         else if(event.getSource() == managementFeeButton){   //Hiển thị bảng phí quản lý
-            
+            setCenterContent("PhiQuanLyView.fxml");
         }
         else if(event.getSource() == parkingFeeButton){   //Hiển thị bảng phí gửi xe
-            
+            setCenterContent("PhiGuiXeView.fxml");
         }
         else if(event.getSource() == livingFeeButton){   //Hiện thị bảng phí sinh hoạt
-            
+            setCenterContent("PhiSinhHoatView.fxml");
         }
         else if(event.getSource() == voluntaryFeeButton){  //Hiển thị bảng phí đóng góp
-            
+            setCenterContent("PhiDongGopView.fxml");
         }
         else if(event.getSource() == payButton){   //Hiển thị thanh toán
-            
+            setCenterContent("ThanhToanView.fxml");
         }
         else if(event.getSource() == statisticButton){  //Hiển thị các thống kê
-            
+            setCenterContent("ThongKeView.fxml");
         }
     }
     
-    //Hiển thị Sidebar
-    @FXML
-    public void OpenSidebarOnAction(ActionEvent event){
-        TranslateTransition slide = new TranslateTransition();
-        slide.setDuration(Duration.seconds(0.2));
-        slide.setNode(sidebarPane);
-        slide.setToX(0);
-        slide.play();
-        sidebarPane.setTranslateX(-250);
-        slide.setOnFinished((ActionEvent e)-> {
-            openMenuButton.setVisible(false);
-            closeMenuButton.setVisible(true);
-        });
+    private void setCenterContent(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(HomeController.class.getResource("/View/" + fxmlFile));
+            Node centerContent = loader.load();
+            borderPane.setCenter(centerContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
-    //Đóng sidebar
-    @FXML
-    public void CloseSidebarOnAction(ActionEvent event){
-        TranslateTransition slide = new TranslateTransition();
-        slide.setDuration(Duration.seconds(0.2));
-        slide.setNode(sidebarPane);
-        slide.setToX(-250);
-        slide.play();
-        sidebarPane.setTranslateX(0);
-        slide.setOnFinished((ActionEvent e)-> {
-            openMenuButton.setVisible(true);
-            closeMenuButton.setVisible(false);
-        });
-    }
-    
-    @FXML
-    public void ShowHomeOwnerOnAction(MouseEvent event) {
-        
-    }
 
 }
