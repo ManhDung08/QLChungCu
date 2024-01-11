@@ -90,7 +90,7 @@ public class HomeController {
             }
         });
         
-        //setCenterContent("ThongKeView.fxml");
+        setCenterContent("ThongKeView.fxml");
         
     }
     

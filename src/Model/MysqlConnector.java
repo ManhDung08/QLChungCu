@@ -241,6 +241,23 @@ public class MysqlConnector {
         return list;
     }
     
+    public int getNumberOfNhanKhau() {
+        int numberOfNhanKhau = 0;
+        try {
+            String query = "SELECT COUNT(*) AS count FROM NhanKhau";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                numberOfNhanKhau = rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return numberOfNhanKhau;
+    }
+    
     public void addNhanKhauData(NhanKhauModel nhanKhau) {
         try {
             String query = "INSERT INTO NhanKhau (MaHoKhau, HoTen, Tuoi, GioiTinh, SoCMND_CCCD, SoDT, QuanHe, TamVang, TamTru) " +
@@ -414,6 +431,34 @@ public class MysqlConnector {
         return list;
     }
     
+    public ObservableList<String> getMaHoKhauData() {
+        ObservableList<HoKhauModel> hoKhauList = getHoKhauData();
+        ObservableList<String> maHoKhauList = FXCollections.observableArrayList();
+
+        for (HoKhauModel hoKhau : hoKhauList) {
+            maHoKhauList.add(hoKhau.getMaHoKhau());
+        }
+
+        return maHoKhauList;
+    }
+    
+    public int getNumberOfHoKhau() {
+        int numberOfHoKhau = 0;
+        try {
+            String query = "SELECT COUNT(*) AS count FROM HoKhau";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                numberOfHoKhau = rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return numberOfHoKhau;
+    }
+    
     public void addHoKhauData(HoKhauModel newHoKhau) {  //Có trigger để thêm dữ liệu các bảng khác rồi
         try {
             String query = "INSERT INTO HoKhau (MaHoKhau, DiaChi, NgayLap, NgayChuyenDi, LyDoChuyen) VALUES (?, ?, ?, ?, ?)";
@@ -459,6 +504,8 @@ public class MysqlConnector {
         }
     }
     
+    //fee data
+    
     public ObservableList<PhiCoDinhModel> getFeeData(String tenPhi, int nam) {
         ObservableList<PhiCoDinhModel> list = FXCollections.observableArrayList();
         try {
@@ -488,6 +535,7 @@ public class MysqlConnector {
         }
         return list;
     }
+    
     
     public float getGiaPhiData(String tenPhi, int nam) {
         float giaPhi = 0.0f;
@@ -659,6 +707,327 @@ public class MysqlConnector {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    
+    public ObservableList<PhiDongGopModel> getPhiDongGopData() {
+        ObservableList<PhiDongGopModel> list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT MaHoKhau, TenPhi, SoTien, NgayDongGop FROM PhiDongGop");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new PhiDongGopModel(
+                        rs.getString("MaHoKhau"),
+                        rs.getString("TenPhi"),
+                        rs.getFloat("SoTien"),
+                        rs.getDate("NgayDongGop").toLocalDate()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public ObservableList<DSPhiDongGop> getDSPhiDongGopData() {
+        ObservableList<DSPhiDongGop> list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT TenPhi, SoTienGoiY FROM DanhSachPhiDongGop");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new DSPhiDongGop(
+                        rs.getString("TenPhi"),
+                        rs.getFloat("SoTienGoiY")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public void addPhiDongGopData(PhiDongGopModel phiDongGopModel) {
+        try {
+            String query = "INSERT INTO PhiDongGop (MaHoKhau, TenPhi, SoTien, NgayDongGop) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, phiDongGopModel.getMaHoKhau());
+            ps.setString(2, phiDongGopModel.getTenPhi());
+            ps.setFloat(3, phiDongGopModel.getSoTien());
+            ps.setObject(4, phiDongGopModel.getNgayDongGop());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void addDSPhiDongGopData(DSPhiDongGop dsPhiDongGop) {
+        try {
+            String query = "INSERT INTO DanhSachPhiDongGop (TenPhi, SoTienGoiY) VALUES (?, ?)";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, dsPhiDongGop.getTenPhi());
+            ps.setFloat(2, dsPhiDongGop.getSoTienGoiY());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void deleteDSPhiDongGopData(String tenPhi) {
+        try {
+            String query = "DELETE FROM DanhSachSPhiDongGop WHERE TenPhi = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, tenPhi);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public ObservableList<PhiSinhHoatModel> getPhiSinhHoatData(int nam) {
+        ObservableList<PhiSinhHoatModel> list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM PhiSinhHoat WHERE Nam = ?");
+            ps.setInt(1, nam);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new PhiSinhHoatModel(
+                        rs.getString("MaHoKhau"),
+                        rs.getFloat("Thang1"),
+                        rs.getFloat("Thang2"),
+                        rs.getFloat("Thang3"),
+                        rs.getFloat("Thang4"),
+                        rs.getFloat("Thang5"),
+                        rs.getFloat("Thang6"),
+                        rs.getFloat("Thang7"),
+                        rs.getFloat("Thang8"),
+                        rs.getFloat("Thang9"),
+                        rs.getFloat("Thang10"),
+                        rs.getFloat("Thang11"),
+                        rs.getFloat("Thang12")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }    
+    
+    public ObservableList<CapNhatPhiSinhHoat> getCapNhatPhiSinhHoatData(int month, int year) {
+        ObservableList<CapNhatPhiSinhHoat> list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM CapNhatPhiSinhHoat WHERE MONTH(NgayCapNhat) = ? and YEAR(NgayCapNhat) = ?");
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new CapNhatPhiSinhHoat(
+                        rs.getString("MaHoKhau"),
+                        rs.getFloat("TienDien"),
+                        rs.getFloat("TienNuoc"),
+                        rs.getFloat("TienInternet")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public void addCapNhatPhiSinhHoatData(CapNhatPhiSinhHoat fee) {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            PreparedStatement ps = connection.prepareStatement( "INSERT INTO CapNhatPhiSinhHoat (MaHoKhau, TienDien, TienNuoc, TienInternet, NgayCapNhat) VALUES (?, ?, ?, ?, ?)");
+            
+            ps.setString(1, fee.getMaHoKhau());
+            ps.setFloat(2, fee.getTienDien());
+            ps.setFloat(3, fee.getTienNuoc());
+            ps.setFloat(4, fee.getTienInternet());
+            ps.setObject(5, currentDate);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean isaddCapNhatPhiSinhHoatValidated(String maHoKhau) { //Kiểm tra trường hợp 1 mã hộ khẩu không được phép có 2 dòng dữ liệu trong 1 tháng
+        try {
+            LocalDate currentDate = LocalDate.now();
+            
+            String query = "SELECT COUNT(*) FROM CapNhatPhiSinhHoat WHERE MaHoKhau = ? AND MONTH(NgayCapNhat) = MONTH(?) AND YEAR(NgayCapNhat) = YEAR(?)";
+            PreparedStatement ps = connection.prepareStatement(query);
+            
+            ps.setString(1, maHoKhau);
+            ps.setObject(2, currentDate);
+            ps.setObject(3, currentDate);
+            
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            return count > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
+    //payment data
+    public ObservableList<ThanhToanModel> getThanhToanData() {
+        ObservableList<ThanhToanModel> list = FXCollections.observableArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM ThanhToan");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new ThanhToanModel(
+                        rs.getString("MaHoKhau"),
+                        rs.getFloat("SoTienThanhToan"),
+                        rs.getDate("NgayThanhToan").toLocalDate()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public ObservableList<String> getFeeNameData() {   //Lấy tên các loại phí đóng góp
+        ObservableList<DSPhiDongGop> feeList = getDSPhiDongGopData();
+        ObservableList<String> feeNameList = FXCollections.observableArrayList();
+
+        for (DSPhiDongGop fee : feeList) {
+            feeNameList.add(fee.getTenPhi());
+        }
+
+        return feeNameList;
+    }
+
+    public void addThanhToanData(ThanhToanModel newThanhToan) {
+        try {
+            String query = "INSERT INTO ThanhToan (MaHoKhau, SoTienThanhToan, NgayThanhToan) VALUES (?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            ps.setString(1, newThanhToan.getMaHoKhau());
+            ps.setFloat(2, newThanhToan.getSoTienThanhToan());
+            ps.setObject(3, newThanhToan.getNgayThanhToan());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //Kiểm tra xem 1 hộ khẩu đã nộp tenPhi chưa nếu chưa thì return true
+    public boolean isLegalPayment(String tenPhi, String maHoKhau, int thang, int nam){ 
+        String columnName = "Thang" + thang;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT " + columnName + " FROM " + tenPhi + " WHERE MaHoKhau = ? AND Nam = ?");
+            ps.setString(1, maHoKhau);
+            ps.setInt(2, nam);
+            
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                float value = rs.getFloat(columnName);
+                return (value == 0.0f);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    //trả về số tiền nộp mỗi tháng của Phí quản lý, phí dịch vụ, phí gửi xe 1 hộ khẩu
+    public float getTienNopMoiThangData(String tenPhi, String maHoKhau, int nam) {  
+        float tienNopMoiThang = 0.0f;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT TienNopMoiThang FROM " + tenPhi + " WHERE MaHoKhau = ? and Nam = ?");
+            ps.setString(1, maHoKhau);
+            ps.setInt(2, nam);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                tienNopMoiThang = rs.getFloat("TienNopMoiThang");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tienNopMoiThang;
+    }
+    
+    
+    //Kiểm tra xem 1 hộ khẩu đã được cập nhật phí sinh hoạt chưa, nếu chưa return false
+    public boolean isHavingLivingFee(String maHoKhau, int thang, int nam){  
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS Count FROM CapNhatPhiSinhHoat WHERE MaHoKhau = ? AND MONTH(NgayCapNhat) = ? AND YEAR(NgayCapNhat) = ?");
+            ps.setString(1, maHoKhau);
+            ps.setInt(2, thang);
+            ps.setInt(3, nam);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt("Count");
+                return count > 0; // Nếu có ít nhất một bản ghi, có nghĩa là đã cập nhật phí sinh hoạt
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
+    //Trả về tiền phí sinh hoạt tháng này của 1 hộ khẩu
+    public float getLivingFeeThisMonth(String maHoKhau, int thang, int nam) {
+        float totalLivingFee = 0.0f;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT TienDien, TienNuoc, TienInternet FROM CapNhatPhiSinhHoat WHERE MaHoKhau = ? AND MONTH(NgayCapNhat) = ? AND YEAR(NgayCapNhat) = ?");
+            ps.setString(1, maHoKhau);
+            ps.setInt(2, thang);
+            ps.setInt(3, nam);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                float tienDien = rs.getFloat("TienDien");
+                float tienNuoc = rs.getFloat("TienNuoc");
+                float tienInternet = rs.getFloat("TienInternet");
+
+                // Tổng hợp các giá trị của TienDien, TienNuoc, TienInternet
+                totalLivingFee = tienDien + tienNuoc + tienInternet;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalLivingFee;
+    }
+    
+    public void updateFeeData(String tenPhi, String maHoKhau, int thang, int nam) {
+        try {
+            String columnName = "Thang" + thang;
+            String updateQuery = "UPDATE " + tenPhi + " SET " + columnName + " = TienNopMoiThang WHERE MaHoKhau = ? AND Nam = ?";
+
+            PreparedStatement ps = connection.prepareStatement(updateQuery);
+            ps.setString(1, maHoKhau);
+            ps.setInt(2, nam);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updatePhiSinhHoatData(String maHoKhau, int thang, int nam) {
+        try {
+            String columnName = "Thang" + thang;
+            String updateQuery = "UPDATE PhiSinhHoat SET " + columnName + " = ? WHERE MaHoKhau = ? AND Nam = ?";
+
+            PreparedStatement ps = connection.prepareStatement(updateQuery);
+            ps.setFloat(1, getLivingFeeThisMonth(maHoKhau, thang, nam));
+            ps.setString(2, maHoKhau);
+            ps.setInt(3, nam);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

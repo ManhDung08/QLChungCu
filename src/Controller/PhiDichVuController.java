@@ -215,7 +215,6 @@ public class PhiDichVuController {
                 String searchWord = newValue.toLowerCase();
                 
                 return PhiCoDinhModel.getMaHoKhau().toLowerCase().contains(searchWord)
-                || String.valueOf(PhiCoDinhModel.getGiaPhi()).contains(searchWord)
                 || String.valueOf(PhiCoDinhModel.getTienNopMoiThang()).contains(searchWord)
                 || String.valueOf(PhiCoDinhModel.getThang1()).contains(searchWord)
                 || String.valueOf(PhiCoDinhModel.getThang2()).contains(searchWord)
