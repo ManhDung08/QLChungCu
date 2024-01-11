@@ -33,7 +33,7 @@
             <TextField fx:id="searchbar" layoutX="285.0" layoutY="12.0" prefHeight="26.0" prefWidth="616.0" promptText="Search..." />
             <AnchorPane layoutX="25.0" layoutY="60.0" prefHeight="350.0" prefWidth="650.0" styleClass="form">
                <children>
-                  <Label fx:id="feeLabel2" alignment="CENTER" layoutY="12.0" prefHeight="30.0" prefWidth="650.0" text="Số tiền đã đóng góp mỗi hộ khẩu" textAlignment="CENTER">
+                  <Label alignment="CENTER" layoutY="12.0" prefHeight="30.0" prefWidth="650.0" text="Số tiền đã đóng góp mỗi hộ khẩu" textAlignment="CENTER">
                      <font>
                         <Font name="Arial" size="24.0" />
                      </font>
@@ -43,7 +43,7 @@
                       <TableColumn fx:id="maHoKhauCol" prefWidth="150.0" text="Mã hộ khẩu" />
                       <TableColumn fx:id="tenPhiCol" prefWidth="160.0" text="Tên phí" />
                         <TableColumn fx:id="soTienCol" prefWidth="160.0" text="Số tiền đóng góp" />
-                        <TableColumn fx:id="ngayDongGop" prefWidth="160.0" text="Ngày đóng góp" />
+                        <TableColumn fx:id="ngayDongGopCol" prefWidth="160.0" text="Ngày đóng góp" />
                     </columns>
                   </TableView>
                </children>
@@ -92,14 +92,14 @@
             </ImageView>
             <AnchorPane layoutX="695.0" layoutY="60.0" prefHeight="350.0" prefWidth="480.0" styleClass="form">
                <children>
-                  <Label fx:id="feeLabel21" alignment="CENTER" layoutY="12.0" prefHeight="30.0" prefWidth="480.0" text="Danh sách các khoản phí đóng góp" textAlignment="CENTER">
+                  <Label alignment="CENTER" layoutY="12.0" prefHeight="30.0" prefWidth="480.0" text="Danh sách các khoản phí đóng góp" textAlignment="CENTER">
                      <font>
                         <Font name="Arial" size="24.0" />
                      </font>
                   </Label>
                   <TableView fx:id="listFeeTableView" layoutX="10.0" layoutY="54.0" prefHeight="230.0" prefWidth="460.0" styleClass="table">
                      <columns>
-                        <TableColumn fx:id="tenPhiCol" prefWidth="200.0" text="Tên Phí" />
+                        <TableColumn fx:id="tenPhi1Col" prefWidth="200.0" text="Tên Phí" />
                         <TableColumn fx:id="soTienGoiYCol" prefWidth="260.0" text="Số tiền đóng góp gợi ý" />
                      </columns>
                   </TableView>

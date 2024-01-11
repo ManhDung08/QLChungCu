@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="773.5" prefWidth="1214.0" stylesheets="@../css/page2.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ThongKeController">
@@ -15,6 +16,48 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="7.0" layoutY="102.0" prefHeight="670.0" prefWidth="1200.0" styleClass="background" />
+      <AnchorPane layoutX="7.0" layoutY="102.0" prefHeight="670.0" prefWidth="1200.0" styleClass="background">
+         <children>
+            <AnchorPane layoutX="120.0" layoutY="30.0" prefHeight="380.0" prefWidth="400.0" styleClass="form">
+               <children>
+                  <Circle fill="#beecfa" layoutX="200.0" layoutY="234.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" layoutY="10.0" prefWidth="400.0" text="Số hộ khẩu trong chung" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutY="55.0" prefWidth="400.0" text="cư hiện tại là:" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="numOfHoKhauLabel" alignment="CENTER" layoutX="125.0" layoutY="159.0" prefHeight="150.0" prefWidth="150.0" text="120" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="90.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="680.0" layoutY="30.0" prefHeight="380.0" prefWidth="400.0" styleClass="form">
+               <children>
+                  <Circle fill="#beecfa" layoutX="200.0" layoutY="234.0" radius="132.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Label alignment="CENTER" layoutY="10.0" prefWidth="400.0" text="Số nhân khẩu trong" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutY="55.0" prefWidth="400.0" text="chung cư hiện tại là:" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="numOfNhanKhauLabel" alignment="CENTER" layoutX="125.0" layoutY="159.0" prefHeight="150.0" prefWidth="150.0" text="120" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="90.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children></AnchorPane>
    </children>
 </AnchorPane>
