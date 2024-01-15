@@ -555,20 +555,16 @@ public class MysqlConnector {
     
     public void changeFeeData(String tenPhi, float newFee, int nam) {
         try {
-            float oldFee = 0.0f, oldMonthlyFee = 0.0f;
-            PreparedStatement psSelect = connection.prepareStatement("SELECT GiaPhi, TienNopMoiThang FROM " + tenPhi + " WHERE Nam = ?");
-            psSelect.setInt(1, nam);
-            ResultSet rs = psSelect.executeQuery();
-            if (rs.next()) {
-                oldFee = rs.getFloat("GiaPhi");
-                oldMonthlyFee = rs.getFloat("TienNopMoiThang");
+            ObservableList<HoKhauModel> model = getDienTichHoData();
+            for(HoKhauModel hoKhau : model){
+                PreparedStatement ps = connection.prepareStatement("UPDATE " + tenPhi + " SET GiaPhi = ?, TienNopMoiThang = ? WHERE MaHoKhau = ? and Nam >= ?");
+                ps.setFloat(1, newFee);
+                ps.setFloat(2, newFee * hoKhau.getDienTichHo());
+                ps.setString(3, hoKhau.getMaHoKhau());
+                ps.setInt(4, nam);
+                ps.executeUpdate();                                                                                                                                                                       
             }
-
-            PreparedStatement psUpdate = connection.prepareStatement("UPDATE " + tenPhi + " SET GiaPhi = ?, TienNopMoiThang = ? WHERE Nam >= ?");
-            psUpdate.setFloat(1, newFee);
-            psUpdate.setFloat(2, oldMonthlyFee / oldFee * newFee);
-            psUpdate.setInt(3, nam);
-            psUpdate.executeUpdate();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }

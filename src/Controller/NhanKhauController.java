@@ -210,8 +210,8 @@ public class NhanKhauController {
             ControllerUtil.showErrorMessage("Vui lòng nhập đủ thông tin cho tất cả các trường trong form khai báo tạm trú!");
             return;
         }
-        if (!isSoCCCDDuplicated(soCCCD)) {
-            ControllerUtil.showErrorMessage("Số CCCD/CMND vừa nhập không tồn tại! Vui lòng nhập lại!");
+        if (isSoCCCDDuplicated(soCCCD)) {
+            ControllerUtil.showErrorMessage("Số CCCD/CMND nằm trong danh sách nhân khẩu sống trong chung cư! Vui lòng nhập lại!");
             return;
         }
         boolean confirmed = ControllerUtil.showConfirmationDialog("Xác nhận khai báo tạm trú", "Bạn có chắc chắn muốn khai báo tạm trú cho nhân khẩu này không ?");
